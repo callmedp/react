@@ -2,9 +2,27 @@ import React from 'react';
 import { Link as LinkScroll } from 'react-scroll'
 import { imageUrl } from 'utils/domains';
 import './banner.scss';
-
+import useLearningTracking from 'services/learningTracking';
 
 const CatalogBanner = (props) => {
+
+    const sendLearningTracking = useLearningTracking();
+
+    const trackingHandler = (type) => {
+
+        sendLearningTracking({
+            productId: '',
+            event: `catalogue_page_${type}_clicked`,
+            pageTitle:'catalogue_page',
+            sectionPlacement: 'banner',
+            eventCategory: type,
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
+    }
+
     return (
        <header className="container-fluid pos-rel catalog-bg">
             <div className="row">
@@ -15,8 +33,8 @@ const CatalogBanner = (props) => {
                         </h1>
                         <p>Join the club of 4mn learners with our partners like Skillsoft, ACCA etc</p>
                         <div className="d-flex w-100 mt-20">
-                            <LinkScroll to="all-categories"  isDynamic={true} spy={true} offset={-35} className="btn btn-outline-white mr-10">View categories</LinkScroll>
-                            <LinkScroll to="recommended-services" isDynamic={true} spy={true} offset={-70} className="btn btn-outline-white">View services</LinkScroll>
+                            <LinkScroll to="all-categories" onClick = { () => trackingHandler('view_categories')} isDynamic={true} spy={true} offset={-35} className="btn btn-outline-white mr-10">View categories</LinkScroll>
+                            <LinkScroll to="recommended-services" onClick = { () => trackingHandler('view_services')} isDynamic={true} spy={true} offset={-70} className="btn btn-outline-white">View services</LinkScroll>
                         </div>
                     </div>
                     <div className="catalog-banner-right">

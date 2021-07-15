@@ -5,23 +5,62 @@ import SnMCourses from 'components/DesktopComponent/Common/Product/product';
 import ITCourses from 'components/DesktopComponent/Common/Product/product';
 import BnFCourses from 'components/DesktopComponent/Common/Product/product';
 import { useSelector } from 'react-redux';
+import useLearningTracking from 'services/learningTracking';
 
 function CoursesTray() {
 
-    const [key, setKey] = useState('categories1');
+    const [key, setKey] = useState('sales_and_marketing_category');
     const [categoryKey1, setCategoryKey1] = useState(1);
     const [categoryKey2, setCategoryKey2] = useState(1);
     const [categoryKey3, setCategoryKey3] = useState(1);
-
+    const sendLearningTracking = useLearningTracking();
     const { SnMCourseList, ITCourseList, BnFCourseList } = useSelector( store => store.popularCategories ) 
     
 
     const loadMoreCourses = (setCategoryKey) => {
         setCategoryKey( state => state + 1 );
+        sendLearningTracking({
+            productId: '',
+            event: `catalogue_page_${key}_view_more`,
+            pageTitle:'catalogue_page',
+            sectionPlacement: 'course_tray',
+            eventCategory: key,
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
     }
 
     const viewLessCourses = (setCategoryKey) => {
         setCategoryKey( state => state - 1 );
+        sendLearningTracking({
+            productId: '',
+            event: `catalogue_page_${key}_view_less`,
+            pageTitle:'catalogue_page',
+            sectionPlacement: 'course_tray',
+            eventCategory: key,
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
+    }
+
+    const handleTabSelect = (category) => {
+        setKey(category)
+    
+        sendLearningTracking({
+            productId: '',
+            event: `catalogue_page_${key}_tab`,
+            pageTitle:'catalogue_page',
+            sectionPlacement: 'course_tray',
+            eventCategory: category,
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
     }
 
     return (
@@ -32,17 +71,18 @@ function CoursesTray() {
                     <Tabs
                         id="controlled-tab-example"
                         activeKey={key}
-                        onSelect={(k) => setKey(k)}
+                        onSelect={(k) => handleTabSelect(k)}
                         className="category"
                     >
 
-                        <Tab eventKey="categories1" title={<h2>Sales and Marketing</h2>}>
+                        <Tab eventKey="sales_and_marketing_category" title={<h2>Sales and Marketing</h2>}>
                             {
                                 SnMCourseList.slice(0, categoryKey1)?.map((courses, index) => {
                                     return (
                                         <ul className="courses-tray__list" key={index} >
                                             {
-                                                courses?.map((course, idx) => <SnMCourses listIdx={idx} index={index.toString() + idx.toString()} product={course} key={index.toString() + idx.toString()} />)
+                                                courses?.map((course, idx) => <SnMCourses category="sales_and_marketing_category" listIdx={idx} index={index.toString() + idx.toString()} 
+                                                                                sectionPlacement='course_tray'  product={course} key={index.toString() + idx.toString()} />)
                                             }
                                         </ul>
                                     )
@@ -52,13 +92,14 @@ function CoursesTray() {
                             { categoryKey1 > 1 ? <a type="button" onClick={() => viewLessCourses(setCategoryKey1)} className="load-more pt-30">View Less Courses</a> : ''}
 
                         </Tab>
-                        <Tab eventKey="categories2" title={<h2>Information Technology</h2>}>
+                        <Tab eventKey="information_technology_category" title={<h2>Information Technology</h2>}>
                             {
                                 ITCourseList.slice(0, categoryKey2)?.map((courses, index) => {
                                     return (
                                         <ul className="courses-tray__list" key={index} >
                                             {
-                                                courses?.map((course, idx) => <ITCourses listIdx={idx} index={index.toString() + idx.toString()} product={course} key={index.toString() + idx.toString()} />)
+                                                courses?.map((course, idx) => <ITCourses listIdx={idx} index={index.toString() + idx.toString()} 
+                                                                                    sectionPlacement='course_tray' category="information_technology_category" product={course} key={index.toString() + idx.toString()} />)
                                             }
                                         </ul>
                                     )
@@ -67,13 +108,14 @@ function CoursesTray() {
                             { categoryKey2 < ITCourseList.length ? <a type="button" onClick={() => loadMoreCourses(setCategoryKey2)} className="load-more pt-30">Load More Courses</a> : ''}
                             { categoryKey2 > 1 ? <a type="button" onClick={() => viewLessCourses(setCategoryKey2)} className="load-more pt-30">View Less Courses</a> : ''}
                         </Tab>
-                        <Tab eventKey="categories3" title={<h2>Banking & Finance</h2>}>
+                        <Tab eventKey="banking_and_finance_category" title={<h2>Banking & Finance</h2>}>
                             {
                                 BnFCourseList.slice(0, categoryKey3).map((courses, index) => {
                                     return (
                                         <ul className="courses-tray__list" key={index} >
                                             {
-                                                courses?.map((course, idx) => <BnFCourses listIdx={idx} index={index.toString() + idx.toString()} product={course} key={index.toString() + idx.toString()} />)
+                                                courses?.map((course, idx) => <BnFCourses category="banking_and_finance_category" listIdx={idx} index={index.toString() + idx.toString()} 
+                                                                                    sectionPlacement='course_tray' product={course} key={index.toString() + idx.toString()} />)
                                             }
                                         </ul>
                                     )

@@ -1,8 +1,24 @@
 import React from 'react';
 import { siteDomain } from 'utils/domains';
+import useLearningTracking from 'services/learningTracking';
 
 const CourseCard = (props) => {
-    const { course, name, indx } = props;
+    const { course, name, indx, sectionPlacement } = props;
+    const sendLearningTracking = useLearningTracking();
+
+    const handleTracking = () => {
+        sendLearningTracking({
+            productId: '',
+            event: `catalogue_page_${name}_clicked`,
+            pageTitle:'catalogue_page',
+            sectionPlacement,
+            eventCategory: name,
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: indx,
+        })
+    }
     
     const starRatings = (star, index) => {
         return (star === '*' ? <em className="icon-fullstar" key={index}></em> : star === '+'
@@ -18,7 +34,7 @@ const CourseCard = (props) => {
                         { (course.imgUrl || course.vendor_image) ? <img itemProp="image" src={course.imgUrl || course.vendor_image} alt={course.imgAlt || course.name || course.heading} /> : ''}
                     </figure>
                     <h3 className="heading3" itemProp="item">
-                        <a href={`${siteDomain}${course.url}`}> <span itemProp="name">{course.name || course.heading}</span></a>
+                        <a onClick={handleTracking} href={`${siteDomain}${course.url}`}> <span itemProp="name">{course.name || course.heading}</span></a>
                     </h3>
                 </div>
                 <div className="card__box">

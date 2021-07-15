@@ -6,6 +6,7 @@ import PopoverDetail from '../PopOverDetail/popOverDetail'
 import { MyGA } from 'utils/ga.tracking.js';
 import { getTrackingInfo, getTrackingParameters } from 'utils/storage.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
+import useLearningTracking from 'services/learningTracking';
 
 const Product = (props) => {
 
@@ -21,10 +22,11 @@ const Product = (props) => {
         number_of_questions,
         imageAlt, id
     },
-        index,
+        index, category, sectionPlacement,
         listIdx, productType } = props
 
     const [halfStar, setHalfStar] = useState(false)
+    const sendLearningTracking = useLearningTracking();
 
     const tracking_data = getTrackingInfo();
 
@@ -43,6 +45,17 @@ const Product = (props) => {
     const handleTracking = () => {
         MyGA.SendEvent('SkillAllCourses', 'ln_course_click', 'ln_all_' + name, 'ln_' + name,'', false, true);
         userTrack({'query' :tracking_data, 'action' :'exit_skill_page'});
+        sendLearningTracking({
+            productId: '',
+            event: `catalogue_page_${category}_${name}`,
+            pageTitle:'catalogue_page',
+            sectionPlacement,
+            eventCategory: category,
+            eventLabel: name,
+            eventAction: 'click',
+            algo: '',
+            rank: index,
+        })
     }
 
     return (
