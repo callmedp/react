@@ -7,7 +7,7 @@ if (typeof global.window == "undefined") {
         resumeShineSiteDomain: "https://pp-resume.shine.com",
         shineSiteDomain: "https://mapi.shine.com",
         chatbotDomain: "https://learning1.shine.com/chatbot",
-        trackingSiteDomain: "http://34.93.108.100:80/api/v1/core/track"
+        trackingSiteDomain: "http://34.93.108.100:80"
     },
   };
 }
