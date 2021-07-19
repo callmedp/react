@@ -8,10 +8,11 @@ import {stringReplace} from 'utils/stringReplace.js';
 
 const ProductCards = props => {
     const {
-        productList, selectedIndexName, noProvider, showMode
+        productList, selectedIndexName, noProvider, showMode,
+        category 
     } = props;
     const sendLearningTracking = useLearningTracking();
-    console.log(selectedIndexName)
+    
 
     const settings = {
         dots: false,
@@ -35,17 +36,33 @@ const ProductCards = props => {
     const mostViewedTracking = (name, vendor, indx) => {
         MyGA.SendEvent('ln_new_homepage','ln_most_viewed_course', 'ln_'+selectedIndexName, stringReplace(name),'', false, true);
 
-        sendLearningTracking({
-            productId: '',
-            event: `homepage_most_viewed_course_${selectedIndexName}_${stringReplace(name)}_vendor_${stringReplace(vendor)}_${indx}_clicked`,
-            pageTitle:`homepage`,
-            sectionPlacement:'most_viewed_courses',
-            eventCategory: `${stringReplace(name)}`,
-            eventLabel: `${selectedIndexName}_${stringReplace(name)}`,
-            eventAction: 'click',
-            algo: '',
-            rank: indx,
-        })
+        if(category){
+            sendLearningTracking({
+                productId: '',
+                event: `catalogue_page_${category}_${name}`,
+                pageTitle:'catalogue_page',
+                sectionPlacement: 'recommended_courses',
+                eventCategory: category,
+                eventLabel: name,
+                eventAction: 'click',
+                algo: '',
+                rank: indx,
+            })
+        }
+        else{
+
+            sendLearningTracking({
+                productId: '',
+                event: `homepage_most_viewed_course_${selectedIndexName}_${stringReplace(name)}_vendor_${stringReplace(vendor)}_${indx}_clicked`,
+                pageTitle:`homepage`,
+                sectionPlacement:'most_viewed_courses',
+                eventCategory: `${stringReplace(name)}`,
+                eventLabel: `${selectedIndexName}_${stringReplace(name)}`,
+                eventAction: 'click',
+                algo: '',
+                rank: indx,
+            })
+        }
     }
 
     return (

@@ -348,6 +348,7 @@ class SearchBaseView(TemplateView):
         3> Builds base template context and updates with any extra context passed
         4> Finally renders the mentioned search template
         """
+        
         paginator, page = self.build_page()
         context = {
             'query': self.query,

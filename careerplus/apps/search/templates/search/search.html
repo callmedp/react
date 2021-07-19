@@ -137,7 +137,7 @@
             <div class="listing-heading-box">
                 {% if products_found %}
                 <div class="form-group custom-select">
-                    <select name="sort" hdn="id_sort" class="form-control cls_filter" onchange="MyGA.SendEvent('ProductListSort', 'ln_course_sort', 'ln_sort_course', $('option:selected', this).text(), '', false, true)">
+                    <select name="sort" hdn="id_sort" class="form-control cls_filter" onchange="sendLearningTracking([{'productId':'', 'event': 'search_page_search_sort_by_'+$('option:selected', this).text(), 'pageTitle': 'search_page', 'sectionPlacement': 'search', 'eventCategory':'sort_by', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': '', 'course_provider': '', 'product_type': '', 'product_price': '' }]);MyGA.SendEvent('ProductListSort', 'ln_course_sort', 'ln_sort_course', $('option:selected', this).text(), '', false, true)">
                         <option value="">Relevance</option>
                         <option value="1" {% if search_params.sort == '1' %}selected="selected"{% endif %}>Latest</option>
                         <option value="2" {% if search_params.sort == '2' %}selected="selected"{% endif %}>Review(High to Low)</option>
@@ -152,7 +152,7 @@
                 {% include 'search/ajax/search_listing.html' %}
             </ul>
             {% if products_found and paginator.num_pages > page.number %}
-                <a href="#" class="load-more cls_load_more">Load more</a>
+                <a href="#" onClick="sendLearningTracking([{'productId':'', 'event': 'search_page_search_load_more_click', 'pageTitle': 'search_page', 'sectionPlacement': 'search', 'eventCategory':'load_more', 'eventLabel': '', 'eventAction': 'search', 'algo': '', 'rank': '', 'course_provider': '', 'product_type': '', 'product_price': '' }]);" class="load-more cls_load_more">Load more</a>
             {% endif %}
         {%endif%}
     </div>       
@@ -172,6 +172,7 @@
     <script src="{% static 'shinelearn/js/search/bootstrap-slider.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/inputTags.jquery.js' %}"></script>
     <script src="{% static 'shinelearn/js/search/search.js' %}"></script>
+    <script src="{% static 'shinelearn/js/common/learning_tracking.js' %}"></script>
     {% endcompress %}
     {% include 'homepage/partials/ga.impression.html' with page="Search" products=page.object_list used_as='fn' %}
     <script>
