@@ -11,6 +11,7 @@ const isMobileDevice = (userAgents) => {
 //Production build may not reflect the changes.
 
 function App() {
+  console.log("Reached App")
   if(isMobileDevice(navigator.userAgent))
     return <MobileApp />
   else

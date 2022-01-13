@@ -1,2 +1,0 @@
-export const FETCH_MY_WALLET = "FETCH_MY_WALLET"
-export const MY_WALLET_FETCHED = 'MY_WALLET_FETCHED'

@@ -1,1 +1,0 @@
-export DJANGO_SETTINGS_MODULE="careerplus.config.settings_live" && /var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/scripts/update_transactions_from_ccavenue.py

@@ -20,18 +20,8 @@ const render = (req, routes) => {
 }
 
 const expressRoutes = [
-    '/course/:func/:skill/:id/',
-    '/courses/:func/:skill/:id/',
-    '/online-courses.html/',
     '/',
 ]
-
-
-
-
-
-
-
 
 export {
     render,

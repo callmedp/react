@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './styles/bootstrap.scss';
 import AppDesktop from './App.desktop';
 import { Provider } from 'react-redux';
 import store from 'store/index';

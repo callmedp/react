@@ -1,13 +1,10 @@
-import React, { useEffect }from 'react';
+import React from 'react';
 import DesktopAppRouter from './routes/index.desktop';
-import { initZendesk } from './utils/zendeskIniti';
 import './App.desktop.css';
 
 function DesktopApp(props) {
-  useEffect(()=>{
-      initZendesk()
-  },[])
 
+  console.log("reached desktop app")
   return (
     <DesktopAppRouter />
   );

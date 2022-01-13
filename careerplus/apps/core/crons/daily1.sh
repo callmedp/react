@@ -1,1 +1,0 @@
-/var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/manage.py order_paid_sms_cron --settings=careerplus.config.settings_live

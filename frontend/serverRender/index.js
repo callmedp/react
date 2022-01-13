@@ -1,9 +1,6 @@
 'use strict';
 global.fetch = require('node-fetch');
 
-// const fetch = require('isomorphic-fetch');
-let Promise = require("bluebird");
-
 const path = require('path');
 
 const fs = require('fs');
@@ -81,27 +78,9 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use(function (req, res, next) {
-    try {
-        cookies = req.headers.cookie;
-        cookies = cookies.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            let cookie = cookies[i].trim();
-            if (cookie.substring(0, '_em_'.length + 1) === ('_em_=')) {
-                cookies = cookie.substring('_em_'.length + 1);
-                break;
-            }
-        }
-    } catch (err) {
-        cookies = '';
-        console.log('error in cookie reading', err);
-    }
 
-    next();
-});
 
-// app.use('/media/static/',express.static('../careerplus/media/static/'));
-app.use(express.static('../careerplus/static_core/react/'));
+app.use(express.static('/'));
 
 const isMobile = (userAgents) => {
     return /Android|Phone|Mobile|Opera\sM(in|ob)i|iP[ao]d|BlackBerry|SymbianOS|Safari\.SearchHelper|SAMSUNG-(GT|C)|WAP|CFNetwork|Puffin|PlayBook|Nokia|LAVA|SonyEricsson|Karbonn|UCBrowser|ucweb|Micromax|Silk|LG(MW|-MMS)|PalmOS/i.test(userAgents)
@@ -124,51 +103,34 @@ app.get(expressRoutes, (req, res) => {
     }
     const branch = matchRoutes(routes, req.path) || [];
 
-       const data = async () => await new Promise((resolve, reject) => {
-        fetch(`${window.config?.siteDomain || 'https://learning.shine.com'}/api/v1/fetch-info/`,
-            {
-                method: 'POST',
-                body: JSON.stringify({ "em": cookies }),
-                headers: { 'Content-Type': 'application/json' }
-            })
-            .then(res => res.json())
-            .then(json => {
-                console.log('promise resolved');
-            })
-            .catch(err => console.log(err))
-            .finally(() => {
-                console.log('here in finally');
-                branch.forEach(async ({ route, match }) => {
-                    if (route && route.actionGroup) {
-                        try {
-                            result = await new Promise((resolve, reject) => fetchApiData(store, match.params,cookies, route.actionGroup, resolve, reject));
-                        }
-                        catch (error) {
-                            if (error?.status === 404) {
-                                return res.redirect('/404/');
-                            }
-                            if(error?.redirect_url) {
-                                if(req.url.split('?').length > 1) return res.redirect(`${error.redirect_url}?${req.url.split('?')[1]}`);
-                                else return res.redirect(error.redirect_url);
-                            }
-                        }
+    branch.forEach(async ({ route, match }) => {
+        if (route && route.actionGroup) {
+            try {
+                result = await new Promise((resolve, reject) => fetchApiData(store, match.params, cookies, route.actionGroup, resolve, reject));
+            }
+            catch (error) {
+                if (error?.status === 404) {
+                    return res.redirect('/404/');
+                }
+                if (error?.redirect_url) {
+                    if (req.url.split('?').length > 1) return res.redirect(`${error.redirect_url}?${req.url.split('?')[1]}`);
+                    else return res.redirect(error.redirect_url);
+                }
+            }
 
-                        appContent = render(req, routes);
-                        const preloadedState = store.getState();
+            appContent = render(req, routes);
+            const preloadedState = store.getState();
 
-                        return res.render(indexFile, {
-                            appContent,
-                            preloadedState: JSON.stringify(preloadedState).replace(/</g, '\\u003c'),
-                            config: JSON.stringify(window.config),
-                        });
-                    }
-                });
+            return res.render(indexFile, {
+                appContent,
+                preloadedState: JSON.stringify(preloadedState).replace(/</g, '\\u003c'),
+                config: JSON.stringify(window.config),
             });
-        });
-    data();
+        }
+    });
 });
 
-
+//To bypass server side rendering
 app.get('*', (req, res) => {
 
     window.config.isServerRendered = false
@@ -181,7 +143,7 @@ app.get('*', (req, res) => {
         console.log("************Entered Desktop***********", req.url)
         indexFile = 'index';
     }
-   
+
     return res.render(indexFile, {
         appContent: '',
         preloadedState: JSON.stringify(''),

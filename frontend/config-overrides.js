@@ -38,9 +38,9 @@ const appMobileIndexJs = resolveModule(resolveApp, 'src/index.mobile');
 const swSrc = resolveModule(resolveApp, 'src/service-worker');
 
 const appHtml = '!!raw-loader!public/serverIndex.ejs';
-const appBuild = resolveApp('../careerplus/static_core/react');
-const indexHtml = '../../../frontend/views/index.ejs';
-const indexMobileHtml = '../../../frontend/views/indexMobile.ejs';
+const appBuild = resolveApp('./build');
+const indexHtml = '../views/index.ejs';
+const indexMobileHtml = '../views/indexMobile.ejs';
 
 module.exports = {
   webpack: function (config, env) {
@@ -48,12 +48,6 @@ module.exports = {
       desktop: appDesktopIndexJs,
       mobile: appMobileIndexJs
     };
-
-    // config.output = {
-    //   ...config.output,
-    //   filename : 
-    // }
-    config.module.rules[2].oneOf[5].use[4].options.prependData = '$image-path: ' + JSON.stringify(process.env.REACT_APP_IMAGE_URL) + ';';
     
 
     config.plugins[6].opts.generate = (seed, files, entrypoints) => {
@@ -109,12 +103,6 @@ module.exports = {
       exclude: [/\.map$/, /asset-manifest\.json$/, /LICENSE/],
     }))
 
-    // config.resolve = {
-    //   ...config.resolve,
-    //   alias: { 'media': '/media/static/react/media' },
-    // };
-
-    // config.plugins.push(new BundleAnalyzerPlugin());
 
   
     return config;
